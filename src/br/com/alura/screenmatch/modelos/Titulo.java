@@ -1,7 +1,12 @@
 package br.com.alura.screenmatch.modelos;
 
+import com.google.gson.annotations.SerializedName;
+
 public class Titulo implements Comparable<Titulo> {
+
+//    @SerializedName("Title")
     private String nome;
+//    @SerializedName("Year")   -> descomentar se quiser usar sem o record
     private int anoDeLancamento;
     private boolean incluidoNoPlano;
     private double somaDasAvaliacoes;
@@ -11,6 +16,17 @@ public class Titulo implements Comparable<Titulo> {
     public Titulo(String nome, int anoDeLancamento) {
         this.nome = nome;
         this.anoDeLancamento = anoDeLancamento;
+    }
+
+    public Titulo(TituloOMDB meuTituloOMDB) {
+        this.nome = meuTituloOMDB.title();
+        //o year de omdb é uma string, por isso preciso passa-la para inteiro
+        this.anoDeLancamento = Integer.valueOf(meuTituloOMDB.year());
+        // aqui coloco substring porque o runtime vem com a palavra min no final
+        this.duracaoEmMinutos = Integer.valueOf(meuTituloOMDB.runtime().substring(0, 2));
+
+
+
     }
 
     public String getNome() {
@@ -57,6 +73,13 @@ public class Titulo implements Comparable<Titulo> {
     public void avalia(double nota){
         somaDasAvaliacoes += nota;
         totalDeAvaliacoes++;
+    }
+
+    @Override
+    public String toString() {
+        return "nome='" + nome + '\'' +
+                ", anoDeLancamento=" + anoDeLancamento + ''
+                ", duração: " + duracaoEmMinutos;
     }
 
     public double pegaMedia(){
